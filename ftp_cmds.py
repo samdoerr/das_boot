@@ -1,0 +1,11 @@
+cmd_list = ['ABOR', 'ACCT', 'ADAT', 'ALLO', 'APPE', 'AUTH', 'CCC', 'CDUP',
+'CONF', 'CWD', 'DELE', 'ENC', 'EPRT', 'EPSV', 'FEAT', 'HELP', 'LANG', 'LIST',
+'LPRT', 'LPSV', 'MDTM', 'MIC', 'MKD', 'MLSD', 'MLST', 'MODE', 'NLST', 'NOOP',
+'OPTS', 'PASS', 'PASV', 'PBSZ', 'PORT', 'PROT', 'PWD', 'QUIT', 'REIN', 'REST',
+'RETR', 'RMD', 'RNFR', 'RNTO', 'SITE', 'SIZE', 'SMNT', 'STAT', 'STOR', 'STOU',
+'STRU', 'SYST', 'TYPE', 'USER', 'XCUP', 'XMKD', 'XPWD', 'XRCP', 'XRMD', 'XRSQ',
+'XSEM', 'XSEN', '100', '110', '120', '125', '150', '200', '202', '202', '211',
+'212','213', '214', '215', '220','221', '225', '226', '227', '228', '229',
+'230', '231', '232', '250', '257', '331', '332', '350', '421', '425', '426',
+'430', '434', '450', '451', '452', '500', '501', '502', '503', '504', '530',
+'532', '550', '551', '552', '553','631', '632', '633']
