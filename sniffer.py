@@ -1,40 +1,46 @@
-import os, sys
-import ftp_cmds
-
+from ftp_cmds import cmd_list
 from scapy.all import *
+from collections import namedtuple
 
-#Authentification
-#euid = os.geteuid()
-#if euid != 0:
-#    print "Script not started as Root. Running sudo..."
-#    args = ['sudo', sys.executable] + sys.argv + [os.environ]
-#    os.execlpe('sudo',  *args)
+ftp_cmds = set(cmd_list)
 
-count = 1;
-ftp_cmds = set(ftp_cmds.cmd_list)
+ip_pair = namedtuple("ip_pair", ["src", "dst"])
 
-def incr_count():
-    global count
-    count += 1
+ftp_packets = []
+quick_lookup = {}
 
-def Raw_check(x):
+def store_packet(src, dst, parsed_data):
+    combo = ip_pair(src, dst)
+    if combo in quick_lookup:
+        index = quick_lookup[combo]
+        ftp_packets[index].append(parsed_data)
+    else:
+        quick_lookup[combo] = len(ftp_packets)
+        ftp_packets.append([parsed_data])
+
+def Raw_check(pkt):
     try:
-        if x[Ether].type == 0x800 and x[IP].proto == 6:
+        if pkt[Ether].type == 0x800 and pkt[IP].proto == 6:
             try:
-                parsed_data = reduce_string(x[TCP].load)
+                parsed_data = reduce_string(pkt[TCP].load)
                 if parsed_data.split(" ", 1)[0] in ftp_cmds:
-                    print str(count) + " Raw Data: " + parsed_data
-                    incr_count()
+                    store_packet(pkt[IP].src, pkt[IP].dst, parsed_data)
             except AttributeError:
                 pass
     except IndexError:
         pass
 
 def reduce_string(string):
-    ending = "\n"
+    ending = "\r\n"
     if string.endswith(ending):
             return string[:-len(ending)]
     else:
             return string
 
 sniff(prn=lambda x: Raw_check(x))
+
+print '\n'
+
+for key, value in quick_lookup.items():
+    print key.src + " >>> " + key.dst
+    print "\n".join(ftp_packets[value]) + "\n"
